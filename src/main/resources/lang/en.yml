@@ -1,0 +1,27 @@
+prefix: "&d[PurrItems] &r"
+
+# Commands
+command.give.success: "&aGave {amount}x {item} to {player}"
+command.give.invalid-item: "&cUnknown item: {item}"
+command.give.invalid-player: "&cPlayer not found: {player}"
+command.info.not-custom: "&cYou're not holding a custom item"
+command.info.header: "&6Item Info:"
+command.info.id: "&7ID: &f{id}"
+command.info.rarity: "&7Rarity: {rarity}"
+
+# Requirements
+requirement.skill: "&c&lREQUIRES: &e{skill} Level {level}"
+requirement.not-met: "&cYou don't meet the requirements for this item!"
+
+# Abilities
+ability.cooldown: "&cAbility on cooldown! ({remaining}s remaining)"
+ability.fire-strike.name: "&cFire Strike"
+ability.fire-strike.desc: "&7Sets enemies on fire"
+
+# Rarities
+rarity.common: "&fCOMMON"
+rarity.uncommon: "&aUNCOMMON"
+rarity.rare: "&9RARE"
+rarity.epic: "&5EPIC"
+rarity.legendary: "&6LEGENDARY"
+rarity.mythic: "&dMYTHIC"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gay.nyaa.purritems.cooldown.CooldownManagerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-11T22:46:08.257Z" hostname="x270" time="0.445">
+  <properties/>
+  <testcase name="clear all cooldowns for player()" classname="gay.nyaa.purritems.cooldown.CooldownManagerTest" time="0.174"/>
+  <testcase name="expired cooldown returns zero()" classname="gay.nyaa.purritems.cooldown.CooldownManagerTest" time="0.115"/>
+  <testcase name="clear specific cooldown()" classname="gay.nyaa.purritems.cooldown.CooldownManagerTest" time="0.003"/>
+  <testcase name="set and check cooldown()" classname="gay.nyaa.purritems.cooldown.CooldownManagerTest" time="0.011"/>
+  <testcase name="cleanup expired cooldowns()" classname="gay.nyaa.purritems.cooldown.CooldownManagerTest" time="0.109"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

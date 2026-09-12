@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-11T22:46:09.076Z" hostname="x270" time="15.665">
+  <properties/>
+  <testcase name="ability without cooldown executes multiple times()" classname="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" time="14.957"/>
+  <testcase name="failed ability execution doesn't set cooldown()" classname="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" time="0.083"/>
+  <testcase name="executeAll only triggers matching abilities()" classname="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" time="0.111"/>
+  <testcase name="ability with cooldown blocks second execution()" classname="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" time="0.322"/>
+  <testcase name="cooldown expires after duration()" classname="gay.nyaa.purritems.integration.AbilityCooldownIntegrationTest" time="0.156"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+WARNING: A Java agent has been loaded dynamically (/home/lucy/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.17/e3c251a39dc90badaf71c83427ba46840f219d8d/byte-buddy-agent-1.14.17.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

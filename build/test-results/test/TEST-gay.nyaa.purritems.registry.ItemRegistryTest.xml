@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gay.nyaa.purritems.registry.ItemRegistryTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-11T22:46:24.762Z" hostname="x270" time="0.763">
+  <properties/>
+  <testcase name="contains check()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.731"/>
+  <testcase name="register and retrieve item()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.002"/>
+  <testcase name="all items retrieval()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.001"/>
+  <testcase name="return null for missing item()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.002"/>
+  <testcase name="size tracking()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.002"/>
+  <testcase name="reject duplicate registration()" classname="gay.nyaa.purritems.registry.ItemRegistryTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,34 @@
+name: PurrItems
+version: '1.0.0'
+main: gay.nyaa.purritems.PurrItemsPlugin
+api-version: '1.21'
+description: Hypixel SkyBlock-inspired item framework with stats, abilities, and requirements
+prefix: PurrItems
+author: flakesonnix
+website: https://github.com/flakesonnix/PurrItems
+
+dependencies:
+  server:
+    PurrCore:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    PurrSkills:
+      load: BEFORE
+      required: true
+      join-classpath: true
+
+permissions:
+  purritems.give:
+    description: Give custom items to players
+    default: op
+  purritems.info:
+    description: View item debug info
+    default: op
+
+commands:
+  purritems:
+    description: PurrItems admin commands
+    usage: /purritems <give|info>
+    permission: purritems.give
+    permission-message: You don't have permission!
