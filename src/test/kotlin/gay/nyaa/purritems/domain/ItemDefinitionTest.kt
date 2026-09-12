@@ -3,7 +3,6 @@ package gay.nyaa.purritems.domain
 import gay.nyaa.purrskills.stats.StatModifier
 import gay.nyaa.purrskills.stats.StatSource
 import gay.nyaa.purrskills.stats.StatType
-import gay.nyaa.purrskills.stats.ModifierType
 import org.bukkit.Material
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -31,8 +30,8 @@ class ItemDefinitionTest {
     fun `build with stats`() {
         val id = ItemId("purr_items", "TEST_ITEM")
         val stats = listOf(
-            StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
-            StatModifier(StatType.HEALTH, 20.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
+            StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
+            StatModifier(StatType.HEALTH, 20.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
         )
 
         val definition = ItemDefinition.builder(id, Material.DIAMOND_SWORD, Rarity.RARE, "Sword")
@@ -73,7 +72,7 @@ class ItemDefinitionTest {
         val id = ItemId("purr_items", "TEST_ITEM")
         val upgradeId = ItemId("purr_items", "UPGRADED")
         val stats = listOf(
-            StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
+            StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
         )
 
         val original = ItemDefinition.builder(id, Material.DIAMOND_SWORD, Rarity.EPIC, "Original")
@@ -117,14 +116,14 @@ class ItemDefinitionTest {
     fun `stats list is immutable copy`() {
         val id = ItemId("purr_items", "TEST_ITEM")
         val stats = mutableListOf(
-            StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
+            StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
         )
 
         val definition = ItemDefinition.builder(id, Material.DIAMOND, Rarity.COMMON, "Test")
             .withStats(stats)
             .build()
 
-        stats.add(StatModifier(StatType.HEALTH, 20.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND))
+        stats.add(StatModifier(StatType.HEALTH, 20.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND))
 
         assertEquals(1, definition.stats.size)
     }

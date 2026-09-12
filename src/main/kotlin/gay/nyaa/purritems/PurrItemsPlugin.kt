@@ -101,25 +101,26 @@ class PurrItemsPlugin : JavaPlugin() {
             // Store instance
             Instance = this
 
-            // Hook PurrCollections if available
+            // Hook PurrCollections if available (deferred one tick: it loads after us).
+            // Uses the public PurrCollectionsAPI — no reflection, compile-time checked.
             server.scheduler.runTask(
                 this,
                 Runnable {
-                    val purrCollections = server.pluginManager.getPlugin("PurrCollections")
-                    if (purrCollections != null) {
-                        try {
-                            val collectionsPlugin = purrCollections as? Any
-                            val handler = collectionsPlugin?.javaClass?.getMethod("getRecipeUnlockHandler")?.invoke(collectionsPlugin)
-                            if (handler != null) {
-                                itemManager.setRecipeUnlockChecker { player, itemId ->
-                                    handler.javaClass.getMethod("hasUnlocked", java.util.UUID::class.java, String::class.java)
-                                        .invoke(handler, player.uniqueId, itemId.toString()) as Boolean
-                                }
-                                logger.info("PurrCollections recipe unlock integration enabled")
-                            }
-                        } catch (e: Exception) {
-                            logger.warning("Failed to integrate with PurrCollections: ${e.message}")
+                    val purrCollections =
+                        server.pluginManager.getPlugin("PurrCollections")
+                            as? gay.nyaa.purrcollections.PurrCollectionsPlugin
+                    if (purrCollections == null || !purrCollections.isEnabled) {
+                        logger.info("PurrCollections not found - recipe unlock gating disabled (all recipes open)")
+                        return@Runnable
+                    }
+                    try {
+                        val api = purrCollections.getAPI()
+                        itemManager.setRecipeUnlockChecker { player, itemId ->
+                            api.hasUnlockedRecipe(player.uniqueId, itemId.toString())
                         }
+                        logger.info("PurrCollections recipe unlock integration enabled")
+                    } catch (e: Exception) {
+                        logger.warning("Failed to integrate with PurrCollections: ${e.message}")
                     }
                 },
             )

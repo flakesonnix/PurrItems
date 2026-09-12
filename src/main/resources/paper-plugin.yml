@@ -17,6 +17,10 @@ dependencies:
       load: BEFORE
       required: true
       join-classpath: true
+    PurrCollections:
+      load: BEFORE
+      required: false
+      join-classpath: true
 
 permissions:
   purritems.give:

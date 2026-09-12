@@ -4,6 +4,7 @@ import gay.nyaa.purritems.domain.ItemDefinition
 import gay.nyaa.purritems.domain.ItemId
 import gay.nyaa.purritems.registry.ItemRegistry
 import gay.nyaa.purritems.rendering.LoreRenderer
+import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
@@ -11,11 +12,16 @@ import org.bukkit.plugin.Plugin
 
 /**
  * Serializes/deserializes custom items to/from ItemStack using PDC.
+ *
+ * @param stackFactory creates the backing stack; defaults to the real
+ * constructor. Tests inject a mock because real ItemStack construction
+ * requires a booted server registry.
  */
 class ItemSerializer(
-    private val plugin: Plugin,
+    plugin: Plugin,
     private val registry: ItemRegistry,
     private val loreRenderer: LoreRenderer,
+    private val stackFactory: (Material, Int) -> ItemStack = ::ItemStack,
 ) {
     private val itemIdKey = NamespacedKey(plugin, "item_id")
 
@@ -26,7 +32,7 @@ class ItemSerializer(
         definition: ItemDefinition,
         amount: Int = 1,
     ): ItemStack {
-        val stack = ItemStack(definition.material, amount)
+        val stack = stackFactory(definition.material, amount)
         val meta = stack.itemMeta ?: return stack
 
         // Store item ID in PDC

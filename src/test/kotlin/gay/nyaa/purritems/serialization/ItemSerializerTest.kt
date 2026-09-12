@@ -7,6 +7,7 @@ import gay.nyaa.purritems.registry.ItemRegistry
 import gay.nyaa.purritems.rendering.LoreRenderer
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -50,21 +51,21 @@ class ItemSerializerTest {
             lore = emptyList(),
         )
 
-        // Mock ItemStack creation
+        // Mock ItemStack creation (real constructor needs a booted server registry)
         val stack = mockk<ItemStack>(relaxed = true) {
             every { itemMeta } returns meta
             every { amount } returns 1
             every { type } returns Material.DIAMOND
         }
+        val injectable = ItemSerializer(plugin, registry, loreRenderer) { _, _ -> stack }
 
-        // We can't easily mock ItemStack constructor, so we'll test the logic
-        // by verifying the expected PDC calls
         val key = NamespacedKey(plugin, "item_id")
-        val result = serializer.createItemStack(definition, 1)
+        val result = injectable.createItemStack(definition, 1)
 
         assertNotNull(result)
         assertEquals(Material.DIAMOND, result.type)
         assertEquals(1, result.amount)
+        verify { pdc.set(key, PersistentDataType.STRING, "purr_items:TEST_ITEM") }
     }
 
     @Test

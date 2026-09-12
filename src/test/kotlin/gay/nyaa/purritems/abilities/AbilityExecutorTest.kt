@@ -56,12 +56,14 @@ class AbilityExecutorTest {
         }
 
         every { cooldownManager.getRemainingCooldown(any(), any()) } returns 0
+        // Capture first: the verify block below would add its own getUniqueId call.
+        val uuid = player.uniqueId
 
         val result = executor.execute(ability, context)
 
         assertTrue(result)
         verify(exactly = 1) { ability.execute(context) }
-        verify(exactly = 1) { cooldownManager.setCooldown(player.uniqueId, "test_ability", 10) }
+        verify(exactly = 1) { cooldownManager.setCooldown(uuid, "test_ability", 10) }
     }
 
     @Test

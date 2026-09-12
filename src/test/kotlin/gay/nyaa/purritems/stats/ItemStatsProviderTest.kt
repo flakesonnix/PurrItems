@@ -8,7 +8,6 @@ import gay.nyaa.purrskills.stats.StatModifier
 import gay.nyaa.purrskills.stats.StatSource
 import gay.nyaa.purrskills.stats.StatType
 import gay.nyaa.purrskills.stats.StatsManager
-import gay.nyaa.purrskills.stats.ModifierType
 import io.mockk.*
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -34,15 +33,16 @@ class ItemStatsProviderTest {
         provider = ItemStatsProvider(itemSerializer, statsManager)
         playerUuid = UUID.randomUUID()
         inventory = mockk(relaxed = true)
-        player = mockk(relaxed = true) {
-            every { uniqueId } returns playerUuid
-            every { getInventory() } returns inventory
-        }
+        player = mockk(relaxed = true)
+        every { player.uniqueId } returns playerUuid
+        every { player.inventory } returns inventory
+        // Default: unknown stacks are vanilla (test-specific stubs override this).
+        every { itemSerializer.getDefinition(any()) } returns null
     }
 
     @Test
     fun `refreshPlayerStats removes old modifiers`() {
-        every { inventory.getItem(any<EquipmentSlot>()) } returns null
+        every { inventory.getItem(any<EquipmentSlot>()) } returns mockk()
 
         provider.refreshPlayerStats(player)
 
@@ -59,7 +59,7 @@ class ItemStatsProviderTest {
     fun `refreshPlayerStats adds stats from main hand`() {
         val id = ItemId("purr_items", "SWORD")
         val stats = listOf(
-            StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
+            StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
         )
         val definition = ItemDefinition.builder(id, Material.DIAMOND_SWORD, Rarity.RARE, "Sword")
             .withStats(stats)
@@ -67,7 +67,7 @@ class ItemStatsProviderTest {
 
         val stack = mockk<ItemStack>()
         every { inventory.getItem(EquipmentSlot.HAND) } returns stack
-        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns null
+        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns mockk()
         every { itemSerializer.getDefinition(stack) } returns definition
 
         provider.refreshPlayerStats(player)
@@ -89,7 +89,7 @@ class ItemStatsProviderTest {
     fun `refreshPlayerStats adds stats from helmet`() {
         val id = ItemId("purr_items", "HELMET")
         val stats = listOf(
-            StatModifier(StatType.DEFENSE, 5.0, ModifierType.FLAT, StatSource.ITEM_HELMET),
+            StatModifier(StatType.DEFENSE, 5.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_HELMET),
         )
         val definition = ItemDefinition.builder(id, Material.DIAMOND_HELMET, Rarity.RARE, "Helmet")
             .withStats(stats)
@@ -97,7 +97,7 @@ class ItemStatsProviderTest {
 
         val stack = mockk<ItemStack>()
         every { inventory.getItem(EquipmentSlot.HEAD) } returns stack
-        every { inventory.getItem(not(eq(EquipmentSlot.HEAD))) } returns null
+        every { inventory.getItem(not(eq(EquipmentSlot.HEAD))) } returns mockk()
         every { itemSerializer.getDefinition(stack) } returns definition
 
         provider.refreshPlayerStats(player)
@@ -127,7 +127,7 @@ class ItemStatsProviderTest {
         )
             .withStats(
                 listOf(
-                    StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.ITEM_MAIN_HAND),
+                    StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_MAIN_HAND),
                 ),
             )
             .build()
@@ -140,14 +140,14 @@ class ItemStatsProviderTest {
         )
             .withStats(
                 listOf(
-                    StatModifier(StatType.DEFENSE, 5.0, ModifierType.FLAT, StatSource.ITEM_HELMET),
+                    StatModifier(StatType.DEFENSE, 5.0, StatModifier.ModifierType.ADDITIVE, StatSource.ITEM_HELMET),
                 ),
             )
             .build()
 
         every { inventory.getItem(EquipmentSlot.HAND) } returns sword
         every { inventory.getItem(EquipmentSlot.HEAD) } returns helmet
-        every { inventory.getItem(not(match { it == EquipmentSlot.HAND || it == EquipmentSlot.HEAD })) } returns null
+        every { inventory.getItem(not(match<EquipmentSlot> { it == EquipmentSlot.HAND || it == EquipmentSlot.HEAD })) } returns mockk()
         every { itemSerializer.getDefinition(sword) } returns swordDef
         every { itemSerializer.getDefinition(helmet) } returns helmetDef
 
@@ -160,7 +160,7 @@ class ItemStatsProviderTest {
     fun `refreshPlayerStats skips vanilla items`() {
         val stack = mockk<ItemStack>()
         every { inventory.getItem(EquipmentSlot.HAND) } returns stack
-        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns null
+        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns mockk()
         every { itemSerializer.getDefinition(stack) } returns null
 
         provider.refreshPlayerStats(player)
@@ -170,7 +170,7 @@ class ItemStatsProviderTest {
 
     @Test
     fun `refreshPlayerStats skips empty slots`() {
-        every { inventory.getItem(any<EquipmentSlot>()) } returns null
+        every { inventory.getItem(any<EquipmentSlot>()) } returns mockk()
 
         provider.refreshPlayerStats(player)
 
@@ -192,7 +192,7 @@ class ItemStatsProviderTest {
     @Test
     fun `refreshPlayerStats converts stat sources correctly`() {
         val originalStats = listOf(
-            StatModifier(StatType.DAMAGE, 10.0, ModifierType.FLAT, StatSource.SKILL_MINING),
+            StatModifier(StatType.DAMAGE, 10.0, StatModifier.ModifierType.ADDITIVE, StatSource.SKILL_MINING),
         )
         val definition = ItemDefinition.builder(
             ItemId("purr_items", "ITEM"),
@@ -205,7 +205,7 @@ class ItemStatsProviderTest {
 
         val stack = mockk<ItemStack>()
         every { inventory.getItem(EquipmentSlot.HAND) } returns stack
-        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns null
+        every { inventory.getItem(not(eq(EquipmentSlot.HAND))) } returns mockk()
         every { itemSerializer.getDefinition(stack) } returns definition
 
         provider.refreshPlayerStats(player)
